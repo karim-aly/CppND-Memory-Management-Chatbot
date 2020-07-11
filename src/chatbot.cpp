@@ -42,7 +42,7 @@ ChatBot::~ChatBot()
     }
 }
 
-ChatBot(const ChatBot &source)              // copy constructor
+ChatBot::ChatBot(const ChatBot &source)              // copy constructor
 {
     std::cout << "ChatBot: Copy Constructor Called from instance (" << &source << ") to instance (" << this << ")\n";
     _currentNode = source._currentNode;
@@ -54,7 +54,7 @@ ChatBot(const ChatBot &source)              // copy constructor
     }
 }
 
-ChatBot(const ChatBot &&source)             // move constructor
+ChatBot::ChatBot(const ChatBot &&source)             // move constructor
 {
     std::cout << "ChatBot: Move Constructor Called from instance (" << &source << ") to instance (" << this << ")\n";
     _currentNode = source._currentNode;
@@ -65,7 +65,7 @@ ChatBot(const ChatBot &&source)             // move constructor
     source._image = NULL;
 }
 
-ChatBot &operator=(const ChatBot &source)   // copy assignment operator
+ChatBot::ChatBot &operator=(const ChatBot &source)   // copy assignment operator
 {
     std::cout << "ChatBot: Copying Content from instance (" << &source << ") to instance (" << this << ")\n";
     _currentNode = source._currentNode;
@@ -76,7 +76,7 @@ ChatBot &operator=(const ChatBot &source)   // copy assignment operator
         _image = new wxBitmap(source._image);
     }
 }
-ChatBot &&operator=(const ChatBot &&source) // move assignment operator
+ChatBot::ChatBot &&operator=(const ChatBot &&source) // move assignment operator
 {
     std::cout << "ChatBot: Moving Content from instance (" << &source << ") to instance (" << this << ")\n";
     _currentNode = source._currentNode;
