@@ -12,7 +12,7 @@
 ChatBot::ChatBot()
 {
     // invalidate data handles
-    _image = nullptr;
+    _image = NULL;
     _chatLogic = nullptr;
     _rootNode = nullptr;
 }
@@ -42,11 +42,50 @@ ChatBot::~ChatBot()
     }
 }
 
-//// STUDENT CODE
-////
+ChatBot(const ChatBot &source)              // copy constructor
+{
+    std::cout << "ChatBot: Copy Constructor Called from instance (" << &source << ") to instance (" << this << ")\n";
+    _currentNode = source._currentNode;
+    _rootNode = source._rootNode;
+    _chatLogic = source._chatLogic;
 
-////
-//// EOF STUDENT CODE
+    if (source._image != NULL) {
+        _image = new wxBitmap(source._image);
+    }
+}
+
+ChatBot(const ChatBot &&source)             // move constructor
+{
+    std::cout << "ChatBot: Move Constructor Called from instance (" << &source << ") to instance (" << this << ")\n";
+    _currentNode = source._currentNode;
+    _rootNode = source._rootNode;
+    _chatLogic = source._chatLogic;
+
+    _image = source._image;
+    source._image = NULL;
+}
+
+ChatBot &operator=(const ChatBot &source)   // copy assignment operator
+{
+    std::cout << "ChatBot: Copying Content from instance (" << &source << ") to instance (" << this << ")\n";
+    _currentNode = source._currentNode;
+    _rootNode = source._rootNode;
+    _chatLogic = source._chatLogic;
+
+    if (source._image != NULL) {
+        _image = new wxBitmap(source._image);
+    }
+}
+ChatBot &&operator=(const ChatBot &&source) // move assignment operator
+{
+    std::cout << "ChatBot: Moving Content from instance (" << &source << ") to instance (" << this << ")\n";
+    _currentNode = source._currentNode;
+    _rootNode = source._rootNode;
+    _chatLogic = source._chatLogic;
+
+    _image = source._image;
+    source._image = NULL;
+}
 
 void ChatBot::ReceiveMessageFromUser(std::string message)
 {
