@@ -50,11 +50,35 @@ ChatBot::ChatBot(const ChatBot &source)              // copy constructor
     _chatLogic = source._chatLogic;
 
     if (source._image != NULL) {
-        _image = new wxBitmap(source._image);
+        _image = new wxBitmap(*source._image);
+    } else {
+        _image = NULL;
     }
 }
 
-ChatBot::ChatBot(const ChatBot &&source)             // move constructor
+ChatBot &ChatBot::operator=(const ChatBot &source)   // copy assignment operator
+{
+    if (this == &source) {
+        return *this;
+    }
+
+    std::cout << "ChatBot: Copying Content from instance (" << &source << ") to instance (" << this << ")\n";
+    _currentNode = source._currentNode;
+    _rootNode = source._rootNode;
+    _chatLogic = source._chatLogic;
+
+    if (_image != NULL) {
+        delete _image;
+    }
+
+    if (source._image != NULL) {
+        _image = new wxBitmap(*source._image);
+    } else {
+        _image = NULL;
+    }
+}
+
+ChatBot::ChatBot(ChatBot &&source)                 // move constructor
 {
     std::cout << "ChatBot: Move Constructor Called from instance (" << &source << ") to instance (" << this << ")\n";
     _currentNode = source._currentNode;
@@ -65,19 +89,12 @@ ChatBot::ChatBot(const ChatBot &&source)             // move constructor
     source._image = NULL;
 }
 
-ChatBot::ChatBot &operator=(const ChatBot &source)   // copy assignment operator
+ChatBot &ChatBot::operator=(ChatBot &&source)     // move assignment operator
 {
-    std::cout << "ChatBot: Copying Content from instance (" << &source << ") to instance (" << this << ")\n";
-    _currentNode = source._currentNode;
-    _rootNode = source._rootNode;
-    _chatLogic = source._chatLogic;
-
-    if (source._image != NULL) {
-        _image = new wxBitmap(source._image);
+    if (this == &source) {
+        return *this;
     }
-}
-ChatBot::ChatBot &&operator=(const ChatBot &&source) // move assignment operator
-{
+
     std::cout << "ChatBot: Moving Content from instance (" << &source << ") to instance (" << this << ")\n";
     _currentNode = source._currentNode;
     _rootNode = source._rootNode;
@@ -131,6 +148,9 @@ void ChatBot::SetCurrentNode(GraphNode *node)
     std::mt19937 generator(int(std::time(0)));
     std::uniform_int_distribution<int> dis(0, answers.size() - 1);
     std::string answer = answers.at(dis(generator));
+
+    // update chatbot instance in ChatLogic class
+    _chatLogic->SetChatbotHandle(this);
 
     // send selected node answer to user
     _chatLogic->SendMessageToUser(answer);
