@@ -83,6 +83,7 @@ ChatBot::ChatBot(ChatBot &&source)                 // move constructor
     std::cout << "ChatBot: Move Constructor Called from instance (" << &source << ") to instance (" << this << ")\n";
     _currentNode = source._currentNode;
     _rootNode = source._rootNode;
+    _chatLogic = source._chatLogic;
     _image = source._image;
 
     // update chatbot handle in ChatLogic class
