@@ -12,7 +12,7 @@
 ChatBot::ChatBot()
 {
     // invalidate data handles
-    _image = NULL;
+    _image = nullptr;
     _chatLogic = nullptr;
     _rootNode = nullptr;
 }
@@ -83,10 +83,16 @@ ChatBot::ChatBot(ChatBot &&source)                 // move constructor
     std::cout << "ChatBot: Move Constructor Called from instance (" << &source << ") to instance (" << this << ")\n";
     _currentNode = source._currentNode;
     _rootNode = source._rootNode;
-    _chatLogic = source._chatLogic;
-
     _image = source._image;
+
+    // update chatbot handle in ChatLogic class
+    _chatLogic->SetChatbotHandle(this);
+
+    // invalidate source data handles
     source._image = NULL;
+    source._currentNode = NULL;
+    source._rootNode = NULL;
+    source._chatLogic = NULL;
 }
 
 ChatBot &ChatBot::operator=(ChatBot &&source)     // move assignment operator
@@ -99,9 +105,16 @@ ChatBot &ChatBot::operator=(ChatBot &&source)     // move assignment operator
     _currentNode = source._currentNode;
     _rootNode = source._rootNode;
     _chatLogic = source._chatLogic;
-
     _image = source._image;
+
+    // update chatbot handle in ChatLogic class
+    _chatLogic->SetChatbotHandle(this);
+
+    // invalidate source data handles
     source._image = NULL;
+    source._currentNode = NULL;
+    source._rootNode = NULL;
+    source._chatLogic = NULL;
 }
 
 void ChatBot::ReceiveMessageFromUser(std::string message)
@@ -148,9 +161,6 @@ void ChatBot::SetCurrentNode(GraphNode *node)
     std::mt19937 generator(int(std::time(0)));
     std::uniform_int_distribution<int> dis(0, answers.size() - 1);
     std::string answer = answers.at(dis(generator));
-
-    // update chatbot instance in ChatLogic class
-    _chatLogic->SetChatbotHandle(this);
 
     // send selected node answer to user
     _chatLogic->SendMessageToUser(answer);
