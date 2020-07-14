@@ -76,6 +76,8 @@ ChatBot &ChatBot::operator=(const ChatBot &source)   // copy assignment operator
     } else {
         _image = NULL;
     }
+
+    return *this;
 }
 
 ChatBot::ChatBot(ChatBot &&source)                 // move constructor
@@ -116,6 +118,8 @@ ChatBot &ChatBot::operator=(ChatBot &&source)     // move assignment operator
     source._currentNode = NULL;
     source._rootNode = NULL;
     source._chatLogic = NULL;
+
+    return *this;
 }
 
 void ChatBot::ReceiveMessageFromUser(std::string message)
